@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trackr - Video Analysis</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">👁 SightiQ</div>
+        <div class="menu">
+            <a href="#">Settings</a>
+            <button class="upload-btn">Upload</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="video-box">
+            <div class="video-preview">[VIDEO PLACEHOLDER]</div>
+            <p class="filename">example.mp4</p>
+            <p class="status">🔄 Analyzing video...</p>
+        </div>
+
+        <div class="summary">
+            <div class="card">
+                <div class="icon">👥</div>
+                <div class="info">
+                    <p class="label">15 People</p>
+                    <p class="desc">Detected</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="icon">⏱</div>
+                <div class="info">
+                    <p class="label">Most Frequent</p>
+                    <p class="desc">Person A</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="icon">📊</div>
+                <div class="info">
+                    <p class="label">Duration</p>
+                    <p class="desc">0m 14s</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
