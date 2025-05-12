@@ -2,26 +2,46 @@
 venv/
 ENV/
 env/
+.venv/
 
-# Archivos de Python bytecode
+# Archivos de Python compilados
 __pycache__/
 *.py[cod]
-*.pyo
+*$py.class
 
-# Config de editores
-.vscode/
-.idea/
-
-# Archivos de logs y bases temporales
+# Archivos de logs y bases de datos locales
 *.log
 *.sqlite3
 
-# Archivos de pruebas
-.coverage
-htmlcov/
-.cache/
-pytest_cache/
+# Archivos de configuración del editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
 
-# Archivos del sistema operativo
+# Archivos de sistema
 .DS_Store
 Thumbs.db
+
+# Archivos de migraciones (opcional ignorar si son temporales, aunque es buena práctica hacer commit de ellas)
+# Puedes comentar esta línea si quieres que las migraciones se incluyan
+# */migrations/*.py
+*/migrations/__pycache__/
+
+# Archivos de configuración de Django que no quieres compartir
+*.env
+.env.example
+
+# Archivos de tests temporales
+coverage/
+htmlcov/
+*.cover
+*.coverage
+nosetests.xml
+test-results.xml
+
+# Archivos de compilación (si usas webpack o algo similar)
+node_modules/
+dist/
+build/
+staticfiles/
