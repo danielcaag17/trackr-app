@@ -1,16 +1,12 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Trackr - Video Analysis</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="{% static 'js/upload.js' %}"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    {% include 'header.html' %}
+{% block title %}Trackr - Video Analysis{% endblock %}
 
+{% block head %}
+    <script src="{% static 'js/upload.js' %}"></script>
+{% endblock%}
+
+{% block content %}
     <main class="main-wrapper centered">
         <div class="center-content">
             <h1 class="main-title">Detect People in<br>Your Videos</h1>
@@ -39,7 +35,4 @@
             </div>
         </div>
     </main>
-
-    {% include 'footer.html' %}
-</body>
-</html>
+{% endblock %}

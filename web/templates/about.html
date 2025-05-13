@@ -1,16 +1,8 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About - Trackr</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
+{% block title %}About - Trackr{% endblock %}
 
-<body>
-    {% include 'header.html' %}
-
+{% block content %}
     <main class="main-wrapper boxed about-page">
         <h1 class="page-title">About Trackr</h1>
         <p class="page-description">
@@ -20,7 +12,4 @@
             We are committed to improving computer vision accessibility and reducing barriers to entry for researchers and developers.
         </p>
     </main>
-
-    {% include 'footer.html' %}
-</body>
-</html>
+{% endblock %}
