@@ -5,7 +5,16 @@ html, body {
     font-family: 'Inter', sans-serif;
     background-color: #f9fafb;
     color: #111827;
-    outline: 5px dashed red;
+    /* outline: 5px dashed red; */
+    overflow-x: hidden; /* evita scroll horizontal */
+    overflow-y: hidden;
+    box-sizing: border-box;
+    scrollbar-width: none;
+}
+
+/* Ocultar scroll bar */
+body::-webkit-scrollbar {
+    display: none;
 }
 
 /* Header */
@@ -13,7 +22,7 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
+    padding: 10px 30px;
     background-color: white;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
@@ -53,21 +62,24 @@ html, body {
 
 .main-section {
     display: flex;
-    padding: 40px 40px;
-    height: calc(100vh - 120px); /* Ajusta según header + footer */
+    padding: 10px 40px;
+    min-height: unset;
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow-x: hidden;
 }
 
 /* Centro */
 .center-content {
     max-width: 600px;
     text-align: center;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .main-title {
-    font-size: 44px;
+    font-size: 35px;
     font-weight: 700;
     margin-bottom: 10px;
 }
@@ -76,39 +88,84 @@ html, body {
     width: 50px;
     height: 2px;
     background-color: #2563eb;
-    margin: 10px auto 20px;
+    margin: 10px auto -5px;
     border: none;
 }
 
 .description {
-    font-size: 18px;
+    font-size: 15px;
     color: #4b5563;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .upload-btn {
     background-color: #2563eb;
     color: white;
-    padding: 12px 22px;
+    padding: 5px 15px;
     font-size: 16px;
     font-weight: 600;
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    margin-bottom: 15px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.upload-form {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #4b5563;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.upload-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 10px;
+}
+
+.video-input {
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
     margin-bottom: 20px;
+    width: 100%;
+    cursor: pointer;
+    color: #374151;
+    display: none;
 }
 
 .info-hints {
-    margin-top: 20px;
-    font-size: 14px;
+    font-size: 13px;
     color: #6b7280;
-    line-height: 1.6;
+    line-height: 0.6;
 }
 
 /* Footer */
 .footer {
     text-align: center;
-    padding: 20px 0;
+    padding: 15px 5px;
     font-size: 14px;
     color: #9ca3af;
     background-color: #f3f4f6;
@@ -117,7 +174,7 @@ html, body {
 .footer a {
     color: #9ca3af;
     text-decoration: none;
-    margin: 0 5px;
+    margin: 5px 5px;
 }
 
 .footer a:hover {

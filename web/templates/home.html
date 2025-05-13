@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Trackr - Video Analysis</title>
-    <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/upload.js' %}"></script>
+    <script src="{% static 'js/adjust_window.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -26,7 +28,19 @@
             <p class="description">
                 Upload a video, and our model will identify the people present and generate related statistics.
             </p>
-            <button class="upload-btn">Upload Video</button>
+
+            <form id="upload-form" action="{% url 'upload_video' %}" method="POST" enctype="multipart/form-data" class="upload-form">
+                {% csrf_token %}
+
+                <label for="video-input" class="upload-label">Select the desired video</label>
+                <label for="video-input" class="custom-file-upload upload-btn">
+                    Choose File
+                </label>
+                <div id="file-name" class="file-name">No file selected</div>
+                <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
+
+                <button type="submit" class="upload-btn">Upload Video</button>
+            </form>
 
             <div class="info-hints">
                 <p><strong>Supported formats:</strong> MP4, AVI, MOV · Max 500MB</p>
@@ -37,7 +51,7 @@
     </main>
 
     <footer class="footer">
-        <p>© 2025 Trackr · <a href="#">Privacy</a> · <a href="#">Contact</a></p>
+        <p><a href="/about">© 2025 Trackr</a> · <a href="legal">Privacy</a> · <a href="contact">Contact</a></p>
     </footer>
 </body>
 </html>
