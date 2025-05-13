@@ -110,6 +110,7 @@ body::-webkit-scrollbar {
 
 /* CONTACT */
 .main-wrapper.boxed.contact-page {
+    width: 100%;
     overflow: hidden; /* evita scroll innecesario */
 }
 
@@ -239,20 +240,42 @@ body::-webkit-scrollbar {
     line-height: 1.6;
 }
 
+.page-description.contact {
+    font-size: 15px;
+    color: #374151;
+    margin-bottom: 5px;
+    line-height: 1.6;
+}
+
 .contact-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 10px;
+    margin-top: 5px;
+    max-height: 500px; /* O la altura máxima que desees */
+    overflow-y: auto;  /* Habilita un scrollbar vertical */
+    overflow-x: hidden; /* Evita el desbordamiento horizontal */
+    padding-right: 10px; /* Opcional: agrega un poco de espacio para el scroll */
+    max-width: 100%;  /* Asegura que el formulario no se expanda más allá de su contenedor */
 }
 
-.contact-form input,
-.contact-form textarea {
+.contact-form input {
+    width: 500px; /* Ancho inicial del textarea */
     padding: 10px 12px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 15px;
     font-family: 'Inter', sans-serif;
+}
+
+.contact-form textarea {
+    width: 500px; /* Ancho inicial del textarea */
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    max-width: 650px;
 }
 
 .contact-form button {
