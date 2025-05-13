@@ -6,22 +6,12 @@
     <title>Trackr - Video Analysis</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="{% static 'js/upload.js' %}"></script>
-    <script src="{% static 'js/adjust_window.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <img src="{% static 'logo.svg' %}" alt="Logo" class="logo-img">
-            <span class="logo-text">Trackr</span>
-        </div>
-        <div class="menu">
-            <a href="#">Settings</a>
-            <button class="auth-btn">Sign in / Log in</button>
-        </div>
-    </header>
+    {% include 'header.html' %}
 
-    <main class="main-section">
+    <main class="main-wrapper centered">
         <div class="center-content">
             <h1 class="main-title">Detect People in<br>Your Videos</h1>
             <hr class="divider" />
@@ -50,8 +40,6 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <p><a href="/about">© 2025 Trackr</a> · <a href="legal">Privacy</a> · <a href="contact">Contact</a></p>
-    </footer>
+    {% include 'footer.html' %}
 </body>
 </html>

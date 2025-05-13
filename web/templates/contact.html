@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact - Trackr</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    {% include 'header.html' %}
+
+    <main class="main-wrapper boxed contact-page">
+        <h1 class="page-title">Contact Us</h1>
+        <p class="page-description">
+            For support, partnership, or questions, please email us at <a href="mailto:support@trackr.com">support@trackr.com</a>.
+        </p>
+        <form class="contact-form">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" rows="4" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>
