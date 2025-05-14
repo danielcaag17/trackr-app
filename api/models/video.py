@@ -12,6 +12,7 @@ class Video(models.Model):
     title = models.CharField(max_length=255)
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
     s3_url = models.URLField(max_length=500)
+    public_url = models.URLField(max_length=500, default='https://s3-us-west-2.amazonaws.com')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

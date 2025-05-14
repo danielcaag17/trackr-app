@@ -6,7 +6,7 @@
     <h1>Resultado de detección</h1>
     <h2>Video: {{ video.title }}</h2>
     <video width="640" height="360" controls>
-          <source src="{{ video.s3_url }}" type="video/mp4">
+          <source src="{{ video.public_url }}" type="video/mp4">
           Tu navegador no soporta video HTML5.
     </video>
     <p>Personas detectadas: {{ result.person_count }}</p>

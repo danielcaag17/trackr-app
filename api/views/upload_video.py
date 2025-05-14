@@ -2,13 +2,49 @@ from django.http import JsonResponse
 from ..models import Video, VideoDetectionResult, User
 from django.shortcuts import redirect
 import requests
+import tempfile
 from urllib.parse import quote
 import uuid
+from django.conf import settings
 from django.utils.timezone import now
+import boto3
+from qtfaststart import processor
 
 
 # Simulación de almacenamiento temporal (en memoria, para demo)
 video_store = {}
+
+
+def upload_s3(video_file, video_id, user):
+    s3 = boto3.client(
+        's3',
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        region_name=settings.AWS_S3_REGION_NAME
+    )
+
+    s3_file_key = f"original_videos/{video_file.name}"
+
+    s3.upload_fileobj(
+        video_file,
+        settings.AWS_STORAGE_BUCKET_NAME,
+        s3_file_key,
+        ExtraArgs={'ContentType': 'video/mp4'}
+        # 'ContentType': video_file.content_type
+    )
+
+    # Generar URL firmada (válida por 1 hora)
+    public_url = s3.generate_presigned_url(
+        ClientMethod='get_object',
+        Params={
+            'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+            'Key': s3_file_key
+        },
+        ExpiresIn=3600  # 1 hora
+    )
+
+    s3_url = f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/{s3_file_key}"
+    return s3_url, public_url
 
 
 def upload_video(request):
@@ -17,15 +53,48 @@ def upload_video(request):
         try:
             user = User.objects.get(username="default")
             video_file = request.FILES.get('video')
+            video_id = str(uuid.uuid4()).replace('-', '')
+            '''''
+            # Crear archivo temporal para input
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_input:
+                for chunk in video_file.chunks():
+                    temp_input.write(chunk)
+                temp_input_path = temp_input.name
 
+            # Crear archivo temporal para output (con faststart)
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_output:
+                temp_output_path = temp_output.name
+
+            # Aplicar faststart (moov atom al inicio)
+            processor.process(temp_input_path, temp_output_path)
+
+            # Subir el nuevo archivo a S3
+            with open(temp_output_path, 'rb') as processed_file:
+                class FileObj:
+                    def __init__(self, file, name, content_type):
+                        self.file = file
+                        self.name = video_file.name
+                        self.content_type = video_file.content_type
+
+                    def read(self, *args):
+                        return self.file.read(*args)
+
+                s3_url, public_url = upload_s3(
+                    FileObj(processed_file, video_file.name, video_file.content_type),
+                    video_id,
+                    user
+                )
+            '''
             # Guardar video en s3
             # Guardar modelo video
             # 1. Guardar el video en la base de datos (y subirlo al sistema de archivos/S3 si está configurado)
+            s3_url, public_url = upload_s3(video_file, video_id, user)
             video = Video.objects.create(
-                id=str(uuid.uuid4()).replace('-', ''),
+                id=video_id,
                 title=video_file.name,
                 autor=user,
-                s3_url="https://bucket.s3.amazonaws.com/archivo.mp4",  # TODO
+                s3_url=s3_url,
+                public_url=public_url,
                 uploaded_at=now(),
             )
 
