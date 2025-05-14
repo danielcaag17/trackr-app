@@ -20,7 +20,7 @@ def contact(request):
 
 
 def detect_video(request, video_id):
-    video = get_object_or_404(Video, video_id=video_id)
+    video = get_object_or_404(Video, id=video_id)
     return render(request, 'detect_video.html', {
         'video': video,
         'result': "result",  # result is the entity of the video detected

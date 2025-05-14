@@ -1,8 +1,10 @@
 from django.http import JsonResponse
-from ..models import Video, VideoDetectionResult
-from django.shortcuts import render, redirect
+from ..models import Video, VideoDetectionResult, User
+from django.shortcuts import redirect
 import requests
 from urllib.parse import quote
+import uuid
+from django.utils.timezone import now
 
 
 # Simulación de almacenamiento temporal (en memoria, para demo)
@@ -13,21 +15,25 @@ def upload_video(request):
     # tambien se puede hacer request.FILES.get('video'), por si falla
     if request.method == 'POST' and request.FILES['video']:
         try:
+            user = User.objects.get(username="default")
             video_file = request.FILES.get('video')
-            video_id = "0001"
 
             # Guardar video en s3
             # Guardar modelo video
             # 1. Guardar el video en la base de datos (y subirlo al sistema de archivos/S3 si está configurado)
             video = Video.objects.create(
-                video_id=video_id,
+                id=str(uuid.uuid4()).replace('-', ''),
                 title=video_file.name,
-                video_file=video_file
+                autor=user,
+                s3_url="https://bucket.s3.amazonaws.com/archivo.mp4",  # TODO
+                uploaded_at=now(),
             )
+
             # Llamar a FastAPI
             # Guardar modelo video detected (asociado a video + persona, tiene modelo de atributo más stats)
             # 2. Llamar a FastAPI para procesar el video (usamos requests)
             fastapi_url = 'http://localhost:8001/process-video/'  # Ajusta según tu API real
+            '''
             response = requests.post(fastapi_url, json={
                 'video_url': request.build_absolute_uri(video.video_file.url),
                 'video_id': str(video.video_id)
@@ -56,8 +62,9 @@ def upload_video(request):
                 'result': "the result",
                 'error': None
             }
-            # Renderizar con éxito
-            return redirect('detect_video', video_id=video.video_id)
+            '''
+
+            return redirect('detect_video', video_id=video.id)
         except Exception as e:
             error_msg = quote(str(e))  # Codifica para URL
             return redirect(f"/detect/error/?error={error_msg}&code=500")
