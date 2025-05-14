@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Detected Video - Trackr{% endblock %}
+
+{% block content %}
+    <h1>Resultado de detección</h1>
+    <h2>Video: {{ video.title }}</h2>
+    <video src="{{ video.video_file.url }}" controls></video>
+    <p>Personas detectadas: {{ result.person_count }}</p>
+    <pre>{{ result.metadata }}</pre>
+{% endblock %}

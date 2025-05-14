@@ -15,7 +15,7 @@
                 Upload a video, and our model will identify the people present and generate related statistics.
             </p>
 
-            <form id="upload-form" action="{% url 'upload_video' %}" method="POST" enctype="multipart/form-data" class="upload-form">
+            <form id="upload-form" action="{% url 'api_upload_video' %}" method="POST" enctype="multipart/form-data" class="upload-form">
                 {% csrf_token %}
 
                 <label for="video-input" class="upload-label">Select the desired video</label>
