@@ -3,12 +3,31 @@
 {% block title %}Detected Video - Trackr{% endblock %}
 
 {% block content %}
-    <h1>Resultado de detección</h1>
-    <h2>Video: {{ video.title }}</h2>
-    <video width="640" height="360" controls>
-          <source src="{{ video.public_url }}" type="video/mp4">
-          Tu navegador no soporta video HTML5.
-    </video>
-    <p>Personas detectadas: {{ result.person_count }}</p>
-    <pre>{{ result.metadata }}</pre>
+    <main class="main-detect-video">
+        <div style="text-align: center; margin-bottom: 20px;"></div>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <video width="640" height="360" controls>
+                <source src="{{ video.public_url }}" type="video/mp4">
+                Tu navegador no soporta video HTML5.
+            </video>
+            <p style="font-size: 14px; color: #6b7280; margin-top: 10px;">
+                <em>example.mp4</em><br>
+            </p>
+        </div>
+
+        <div style="display: flex; justify-content: space-around; background-color: #f3f4f6; border-radius: 10px; padding: 15px; margin-top: 10px;">
+            <div style="text-align: center;">
+                <div style="font-size: 24px; font-weight: 600;">15</div>
+                <div style="font-size: 14px; color: #374151;">People<br>Detected</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 16px; font-weight: 600;">Person A</div>
+                <div style="font-size: 14px; color: #374151;">Most Frequent</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 16px; font-weight: 600;">0m 14s</div>
+                <div style="font-size: 14px; color: #374151;">Duration</div>
+            </div>
+        </div>
+    </main>
 {% endblock %}
