@@ -129,6 +129,7 @@ body::-webkit-scrollbar {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
     display: flex;
     box-sizing: border-box;
+    gap: 10px;
 }
 
 /* Centro */
@@ -331,4 +332,81 @@ header {
 footer {
     height: 60px;
     bottom: 0;
+}
+
+/* Panel con transición */
+/* Oculto inicialmente */
+#stats-details, #model-details {
+    background-color: #f9fafb;
+    border-radius: 10px;
+    padding: 0 15px;
+    margin-top: 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, padding 0.3s ease;
+}
+
+/* Se muestra cuando se le añade la clase "open" */
+#stats-details.open, #model-details.open {
+    max-height: 1000px; /* Ajusta según la altura esperada */
+    padding: 15px;
+}
+
+
+.stats-card {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.3s ease;
+}
+
+.stats-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.stats-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 15px;
+}
+
+.stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #374151;
+}
+
+.stats-list li {
+    margin-bottom: 6px;
+}
+
+.muted {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.toggle-btn {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.toggle-btn:active {
+    background-color: #1e40af;
 }

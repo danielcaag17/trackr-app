@@ -2,6 +2,10 @@
 {% load static %}
 {% block title %}Detected Video - Trackr{% endblock %}
 
+{% block head %}
+    <script src="{% static 'js/show_details.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     <main class="main-detect-video">
         <div style="text-align: center; margin-bottom: 20px;"></div>
@@ -15,18 +19,74 @@
             </p>
         </div>
 
-        <div style="display: flex; justify-content: space-around; background-color: #f3f4f6; border-radius: 10px; padding: 15px; margin-top: 10px;">
-            <div style="text-align: center;">
-                <div style="font-size: 24px; font-weight: 600;">15</div>
-                <div style="font-size: 14px; color: #374151;">People<br>Detected</div>
+        <!-- Contenedor de estadísticas agrupadas -->
+        <div style="display: flex; justify-content: space-around; background-color: #f3f4f6; border-radius: 10px; padding: 15px; flex-wrap: wrap; gap: 15px; text-align: center;">
+            <div style="min-width: 100px;">
+                <div style="font-size: 24px; font-weight: 700;">15</div>
+                <div style="font-size: 14px; color: #4b5563;">People<br>Detected</div>
             </div>
-            <div style="text-align: center;">
-                <div style="font-size: 16px; font-weight: 600;">Person A</div>
-                <div style="font-size: 14px; color: #374151;">Most Frequent</div>
+            <div style="min-width: 100px;">
+                <div style="font-size: 16px; font-weight: 600;">8,68</div>
+                <div style="font-size: 14px; color: #4b5563;">Average people<br>per frame</div>
             </div>
-            <div style="text-align: center;">
-                <div style="font-size: 16px; font-weight: 600;">0m 14s</div>
-                <div style="font-size: 14px; color: #374151;">Duration</div>
+            <div style="min-width: 100px;">
+                <div style="font-size: 16px; font-weight: 600;">57%</div>
+                <div style="font-size: 14px; color: #4b5563;">Person Presence</div>
+            </div>
+        </div>
+        <div></div>
+
+        <!-- Estadísticas del video -->
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="toggle-info-btn" onclick="toggleInfoDetails()" class="toggle-btn">
+                Mostrar estadísticas adicionales
+            </button>
+        </div>
+
+        <div id="stats-details" class="model-details-collapsed">
+            <div class="stats-card">
+                <h3 class="stats-title">Video Stats</h3>
+                <ul class="stats-list">
+                    <li><strong>Frames processed:</strong> 625</li>
+                    <li><strong>Video duration:</strong> 20.83s</li>
+                    <li><strong>Frame rate:</strong> 30 FPS</li>
+                    <li><strong>Processing time:</strong> 188.78s</li>
+                    <li><strong>Confidence threshold:</strong> 0.4</li>
+                </ul>
+            </div>
+            <div class="stats-card">
+                <h3 class="stats-title">Model Analysis</h3>
+                <ul class="stats-list">
+                    <li><strong>Total detections:</strong> 5043</li>
+                    <li><strong>Detections discarded:</strong> 2037</li>
+                    <li><strong>Frames with detections:</strong> 625</li>
+                    <li><strong>People detected:</strong> 109</li>
+                    <li><strong>Average confidence:</strong> 0.864</li>
+                    <li><strong>Average people per frame:</strong> 8.07</li>
+                    <li><strong>Person presence:</strong> 100%</li>
+                    <li><strong>Peak people in frame:</strong> 15 <span class="muted">(frame #91)</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Botón para mostrar detalles -->
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="toggle-model-btn" onclick="toggleModelDetails()" class="toggle-btn">
+                Mostrar detalles del modelo
+            </button>
+        </div>
+
+        <!-- Panel animado, se puede poner tambien encima del botón -->
+        <div id="model-details" class="model-details-collapsed">
+            <div class="stats-card">
+                <h3 class="stats-title">Video Stats</h3>
+                <ul class="stats-list">
+                    <li><strong>Frames processed:</strong> 625</li>
+                    <li><strong>Video duration:</strong> 20.83s</li>
+                    <li><strong>Frame rate:</strong> 30 FPS</li>
+                    <li><strong>Processing time:</strong> 188.78s</li>
+                    <li><strong>Confidence threshold:</strong> 0.4</li>
+                </ul>
             </div>
         </div>
     </main>
