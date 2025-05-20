@@ -410,3 +410,83 @@ footer {
 .toggle-btn:active {
     background-color: #1e40af;
 }
+
+.video-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.video-title {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 10px;
+}
+.summary-stats {
+    display: flex;
+    justify-content: center;
+    background-color: #f3f4f6;
+    border-radius: 10px;
+    padding: 15px;
+    gap: 30px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+.stat-box {
+    min-width: 100px;
+}
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+}
+.stat-label {
+    font-size: 14px;
+    color: #4b5563;
+}
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+.stats-toggle-btn {
+    padding: 10px 20px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+.stats-toggle-btn:hover {
+    background-color: #1d4ed8;
+}
+.details-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.3s ease;
+    background-color: #f9fafb;
+    border-radius: 10px;
+    margin-top: 15px;
+    padding: 0 15px;
+}
+.details-panel.open {
+    max-height: 1500px;
+    padding: 15px;
+}
+.stats-card {
+    margin-bottom: 20px;
+}
+.stats-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.stats-list {
+    list-style: none;
+    padding: 0;
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.6;
+}
+.muted {
+    color: #9ca3af;
+}
+
