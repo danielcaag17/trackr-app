@@ -5,9 +5,9 @@ function toggleInfoDetails() {
         panel.classList.toggle('open');
 
         if (panel.classList.contains('open')) {
-            button.textContent = 'Ocultar estadísticas extra';
+            button.textContent = 'Hide additional stats';
         } else {
-            button.textContent = 'Mostrar estadísticas extra';
+            button.textContent = 'Show additional stats';
         }
     }
 
@@ -18,8 +18,8 @@ function toggleModelDetails() {
         panel.classList.toggle('open');
 
         if (panel.classList.contains('open')) {
-            button.textContent = 'Ocultar detalles del modelo';
+            button.textContent = 'Hide model details';
         } else {
-            button.textContent = 'Mostrar detalles del modelo';
+            button.textContent = 'Show model details';
         }
     }

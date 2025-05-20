@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from api.models import Video
+from api.models import Video, VideoDetectionResult
 
 
 # Create your views here.
@@ -21,11 +21,23 @@ def contact(request):
 
 def detect_video(request, video_id):
     video = get_object_or_404(Video, id=video_id)
-    return render(request, 'detect_video.html', {
-        'video': video,
-        'result': "result",  # result is the entity of the video detected
+    video_detection_result = get_object_or_404(
+        VideoDetectionResult,
+        original_video=video,
+        title=video.title,
+        autor=video.autor
+    )
+    tracker = video_detection_result.tracker
+    ml_model = video_detection_result.ml_model
+    model_metrics = ml_model.metrics
+    context = {
+        'video': video_detection_result,
+        'tracker': tracker,
+        'ml_model': ml_model,
+        'model_metrics': model_metrics,
         'error': None
-    })
+    }
+    return render(request, 'detect_video.html', context)
 
 
 def detect_video_error(request):
