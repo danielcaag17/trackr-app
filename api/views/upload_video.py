@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from ..models import Video, VideoDetectionResult, User
+from ..models import Video, VideoDetectionResult, User, Tracker, MLModel, ModelMetrics
 from django.shortcuts import redirect
 import requests
 import tempfile
@@ -10,9 +10,8 @@ from django.utils.timezone import now
 import boto3
 from qtfaststart import processor
 
-
-# Simulación de almacenamiento temporal (en memoria, para demo)
-video_store = {}
+# Should not be this URL but because of using render I have to use ti
+fastapi_url = 'https://trackr-ml-api.onrender.com/api/video/response'
 
 
 def upload_s3(video_file, video_id, user):
@@ -53,42 +52,14 @@ def upload_video(request):
         try:
             user = User.objects.get(username="default")
             video_file = request.FILES.get('video')
-            video_id = str(uuid.uuid4()).replace('-', '')
-            '''''
-            # Crear archivo temporal para input
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_input:
-                for chunk in video_file.chunks():
-                    temp_input.write(chunk)
-                temp_input_path = temp_input.name
+            video_id = str(uuid.uuid4()).replace('-', '')  # Assign an ID to the video
 
-            # Crear archivo temporal para output (con faststart)
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_output:
-                temp_output_path = temp_output.name
+            # s3_url, public_url = upload_s3(video_file, video_id, user)  # Save vidoe in S3
+            # todo: quitar el cometnario de arriba, ahora es solo para testear
+            s3_url = "https://s3-us-west-2.amazonaws.com"
+            public_url = "https://s3-us-west-2.amazonaws.com"
 
-            # Aplicar faststart (moov atom al inicio)
-            processor.process(temp_input_path, temp_output_path)
-
-            # Subir el nuevo archivo a S3
-            with open(temp_output_path, 'rb') as processed_file:
-                class FileObj:
-                    def __init__(self, file, name, content_type):
-                        self.file = file
-                        self.name = video_file.name
-                        self.content_type = video_file.content_type
-
-                    def read(self, *args):
-                        return self.file.read(*args)
-
-                s3_url, public_url = upload_s3(
-                    FileObj(processed_file, video_file.name, video_file.content_type),
-                    video_id,
-                    user
-                )
-            '''
-            # Guardar video en s3
-            # Guardar modelo video
-            # 1. Guardar el video en la base de datos (y subirlo al sistema de archivos/S3 si está configurado)
-            s3_url, public_url = upload_s3(video_file, video_id, user)
+            # Save the video
             video = Video.objects.create(
                 id=video_id,
                 title=video_file.name,
@@ -98,15 +69,8 @@ def upload_video(request):
                 uploaded_at=now(),
             )
 
-            # Llamar a FastAPI
-            # Guardar modelo video detected (asociado a video + persona, tiene modelo de atributo más stats)
-            # 2. Llamar a FastAPI para procesar el video (usamos requests)
-            fastapi_url = 'http://localhost:8001/process-video/'  # Ajusta según tu API real
-            '''
-            response = requests.post(fastapi_url, json={
-                'video_url': request.build_absolute_uri(video.video_file.url),
-                'video_id': str(video.video_id)
-            })
+            # Call to the API
+            response = requests.get(fastapi_url)
 
             if response.status_code != 200:
                 error_msg = quote("FastAPI devolvió error")
@@ -114,26 +78,67 @@ def upload_video(request):
 
             detection_data = response.json()
 
-            # Recopilar la info a mostrar en el html
-            # 3. Guardar el resultado de la detección
-            result = VideoDetectionResult.objects.create(
-                video=video,
-                person_count=detection_data.get('person_count'),
-                metadata=detection_data  # o campos separados
+            # Save data to the corresponding models
+            tracker_info = detection_data["metadata"]["tracker_info"]
+            tracker = Tracker.objects.create(
+                iou_threshold=tracker_info["iou_threshold"],
+                max_age=tracker_info["max_age"],
+                min_hits=tracker_info["min_hits"]
             )
-    
+
+            model_metrics_info = detection_data["metadata"]["model_info"]["model_metrics"]
+            train_info = model_metrics_info["train"]
+            val_info = model_metrics_info["validation"]
+            model_metrics = ModelMetrics.objects.create(
+                train_box_loss=train_info["box_loss"],
+                train_cls_loss=train_info["cls_loss"],
+                train_dfl_loss=train_info["dfl_loss"],
+                val_box_loss=val_info["box_loss"],
+                val_cls_loss=val_info["cls_loss"],
+                val_dfl_loss=val_info["dfl_loss"],
+                val_precision=val_info["precision"],
+                val_recall=val_info["recall"],
+                val_map50=val_info["mAP50"],
+                val_map50_95=val_info["mAP50-95"]
+            )
+
+            model_info = detection_data["metadata"]["model_info"]
+            ml_model = MLModel.objects.create(
+                model_name=model_info["model_used"],
+                description=model_info["model_description"],
+                metrics=model_metrics
+            )
+
+            metadata = detection_data["metadata"]
+            statistics = detection_data["statistics"]
+            video_detection_result = VideoDetectionResult.objects.create(
+                title=video_file.name,
+                autor=user,
+                s3_url=s3_url,
+                original_video=video,
+                tracker=tracker,
+                ml_model=ml_model,
+                frame_processed=metadata["frames_processed"],
+                confidence_threshold=metadata["confidence_threshold"],
+                video_duration=metadata["video_duration"],
+                processing_time_seconds=metadata["processing_time_seconds"],
+                video_fps=metadata["video_fps"],
+                total_detections=statistics["total_detections"],
+                detections_discarded=statistics["detections_discarded"],
+                frames_with_detections=statistics["frames_with_detections"],
+                avg_confidence=statistics["avg_confidence"],
+                avg_people_per_frame=statistics["avg_people_per_frame"],
+                person_presence_percent=statistics["person_presence_percent"],
+                people_detected=statistics["people_detected"],
+                peak_frame_id=statistics["peak_people_frame"]["frame_id"],
+                peak_count=statistics["peak_people_frame"]["count"],
+                detections_per_frame=statistics["detections_per_frame"],
+                time_per_person=statistics["time_per_person"]
+            )
+
             # Eliminar video en s3 y la detección (todo al tanto de si se puede ver el video)
-            # 4. Opcional: eliminar video físico si no quieres guardarlo
-            # os.remove(video.video_file.path)  ← solo si está en disco local
 
-            context = {
-                'title': "the title video",
-                'result': "the result",
-                'error': None
-            }
-            '''
-
-            return redirect('detect_video', video_id=video.id)
+            return redirect('detect_video', video_id=video_detection_result.original_video.id)
         except Exception as e:
             error_msg = quote(str(e))  # Codifica para URL
             return redirect(f"/detect/error/?error={error_msg}&code=500")
@@ -141,11 +146,3 @@ def upload_video(request):
     # Si no es POST válido
     error_msg = quote("Método no permitido o archivo no enviado")
     return redirect(f"/detect/error/?error={error_msg}&code=400")
-
-
-def check_status(request, video_id):
-    info = video_store.get(video_id)
-    if not info:
-        return JsonResponse({'error': 'Not found'}, status=404)
-    return JsonResponse(info)
-

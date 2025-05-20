@@ -20,4 +20,6 @@ class ModelMetrics(models.Model):
 class MLModel(models.Model):
     model_name = models.CharField(max_length=32)
     description = models.TextField()
-    metrics = models.OneToOneField(ModelMetrics, on_delete=models.SET_NULL, null=True, blank=True, related_name='ml_model')
+    metrics = models.OneToOneField(
+        ModelMetrics, on_delete=models.SET_NULL, null=True, blank=True, related_name='ml_model'
+    )

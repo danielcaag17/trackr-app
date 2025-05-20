@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from .ml_model import MLModel
 from .user import User
 from .video import Video
@@ -42,4 +41,4 @@ class VideoDetectionResult(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('title', 'autor')
+        unique_together = ('title', 'autor', 'ml_model')
