@@ -15,22 +15,22 @@
                 Tu navegador no soporta video HTML5.
             </video>
             <p style="font-size: 14px; color: #6b7280; margin-top: 10px;">
-                <em>example.mp4</em><br>
+                <em>{{ video.title }}</em><br>
             </p>
         </div>
 
         <!-- Contenedor de estadísticas agrupadas -->
         <div style="display: flex; justify-content: space-around; background-color: #f3f4f6; border-radius: 10px; padding: 15px; flex-wrap: wrap; gap: 15px; text-align: center;">
             <div style="min-width: 100px;">
-                <div style="font-size: 24px; font-weight: 700;">15</div>
+                <div style="font-size: 24px; font-weight: 700;">{{ video.people_detected }}</div>
                 <div style="font-size: 14px; color: #4b5563;">People<br>Detected</div>
             </div>
             <div style="min-width: 100px;">
-                <div style="font-size: 16px; font-weight: 600;">8,68</div>
+                <div style="font-size: 16px; font-weight: 600;">{{ video.avg_people_per_frame }}</div>
                 <div style="font-size: 14px; color: #4b5563;">Average people<br>per frame</div>
             </div>
             <div style="min-width: 100px;">
-                <div style="font-size: 16px; font-weight: 600;">57%</div>
+                <div style="font-size: 16px; font-weight: 600;">{{ video.person_presence_percent }}</div>
                 <div style="font-size: 14px; color: #4b5563;">Person Presence</div>
             </div>
         </div>
@@ -39,7 +39,7 @@
         <!-- Estadísticas del video -->
         <div style="text-align: center; margin-top: 20px;">
             <button id="toggle-info-btn" onclick="toggleInfoDetails()" class="toggle-btn">
-                Mostrar estadísticas adicionales
+                Show additional stats
             </button>
         </div>
 
@@ -47,11 +47,23 @@
             <div class="stats-card">
                 <h3 class="stats-title">Video Stats</h3>
                 <ul class="stats-list">
-                    <li><strong>Frames processed:</strong> 625</li>
-                    <li><strong>Video duration:</strong> 20.83s</li>
-                    <li><strong>Frame rate:</strong> 30 FPS</li>
-                    <li><strong>Processing time:</strong> 188.78s</li>
-                    <li><strong>Confidence threshold:</strong> 0.4</li>
+                    <li><strong>Frames processed:</strong> {{ video.frame_processed }}</li>
+                    <li><strong>Video duration:</strong> {{ video.video_duration }}</li>
+                    <li><strong>Frame rate:</strong> {{ video.video_fps }}</li>
+                    <li><strong>Processing time:</strong> {{ video.processing_time_seconds }}</li>
+                    <li><strong>Confidence threshold:</strong> {{ video.confidence_threshold }}</li>
+
+                    <li><strong>Total detections:</strong> {{ video.total_detections }}</li>
+                    <li><strong>Detections discarded:</strong> {{ video.detections_discarded }}</li>
+                    <li><strong>Frames with Detections:</strong> {{ video.frames_with_detections }}</li>
+                    <li><strong>Average confidence:</strong> {{ video.avg_confidence }}</li>
+                    <li><strong>Peak frame_id:</strong> {{ video.peak_frame_id }}</li>
+                    <li><strong>Peak count:</strong> {{ video.peak_count }}</li>
+                    <!-- todo
+                    <li><strong>Detection per frame:</strong> {{ video.detections_per_frame }}</li>
+                    <li><strong>Time per person:</strong> {{ video.time_per_person }}</li>
+                    -->
+
                 </ul>
             </div>
             <div class="stats-card">
@@ -69,23 +81,33 @@
             </div>
         </div>
 
-        <!-- Botón para mostrar detalles -->
+        <!-- Botón para mostrar detalles del modelo, todo: mostrar el tracker -->
         <div style="text-align: center; margin-top: 20px;">
             <button id="toggle-model-btn" onclick="toggleModelDetails()" class="toggle-btn">
-                Mostrar detalles del modelo
+                Show model details
             </button>
         </div>
 
         <!-- Panel animado, se puede poner tambien encima del botón -->
         <div id="model-details" class="model-details-collapsed">
             <div class="stats-card">
-                <h3 class="stats-title">Video Stats</h3>
+                <h3 class="stats-title">Model Stats</h3>
                 <ul class="stats-list">
-                    <li><strong>Frames processed:</strong> 625</li>
-                    <li><strong>Video duration:</strong> 20.83s</li>
-                    <li><strong>Frame rate:</strong> 30 FPS</li>
-                    <li><strong>Processing time:</strong> 188.78s</li>
-                    <li><strong>Confidence threshold:</strong> 0.4</li>
+                    <li><strong>Model name:</strong> {{ ml_model.model_name }}</li>
+                    <li><strong>Description:</strong> {{ ml_model.description}}</li>
+
+                    <li><strong>Train box loss:</strong> {{ model_metrics.train_box_loss }}</li>
+                    <li><strong>Train classification loss:</strong> {{ model_metrics.train_cls_loss }}</li>
+                    <li><strong>Train distributed focal loss:</strong> {{ model_metrics.train_dfl_loss }}</li>
+
+                    <li><strong>Validation box loss:</strong> {{ model_metrics.val_box_loss }}</li>
+                    <li><strong>Validation classification loss:</strong> {{ model_metrics.val_cls_loss }}</li>
+                    <li><strong>Validation distributed focal loss:</strong> {{ model_metrics.val_dfl_loss }}</li>
+
+                    <li><strong>Validation Precision:</strong> {{ model_metrics.val_precision }}</li>
+                    <li><strong>Validation Recall:</strong> {{ model_metrics.val_recall }}</li>
+                    <li><strong>Validation mAP50:</strong> {{ model_metrics.val_map50 }}</li>
+                    <li><strong>Validation mAP50-95:</strong> {{ model_metrics.val_map50_95 }}</li>
                 </ul>
             </div>
         </div>
