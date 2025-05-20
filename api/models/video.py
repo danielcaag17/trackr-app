@@ -14,5 +14,5 @@ class Video(models.Model):
     for now this, later when managing users, there would not be the default.
     Now two random people cannot upload a video named equally
     class Meta:
-        {title, autor}
+        unique_together = ('title', 'autor')
     '''
