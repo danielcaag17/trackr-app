@@ -1,0 +1,31 @@
+/* ================= FORMS ================= */
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 500px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+}
+
+.contact-form textarea {
+  max-width: 650px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-light);
+}
