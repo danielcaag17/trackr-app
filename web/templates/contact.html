@@ -5,13 +5,19 @@
 {% block content %}
     <main class="main-wrapper boxed contact-page">
         <h1 class="page-title">Contact Us</h1>
-        <p class="page-description contact">
+        <p class="page-description">
             For support, partnership, or questions, please email us at <a href="mailto:support@trackr.com">support@trackr.com</a>.
         </p>
         <form class="contact-form">
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" rows="4" required></textarea>
+            <label for="name" class="visually-hidden">Your Name</label>
+            <input id="name" type="text" placeholder="Your Name" required>
+
+            <label for="email" class="visually-hidden">Your Email</label>
+            <input id="email" type="email" placeholder="Your Email" required>
+
+            <label for="message" class="visually-hidden">Your Message</label>
+            <textarea id="message" placeholder="Your Message" rows="4" required></textarea>
+
             <button type="submit">Send Message</button>
         </form>
     </main>

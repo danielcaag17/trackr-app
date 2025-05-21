@@ -1,25 +1,26 @@
-function toggleInfoDetails() {
-        const panel = document.getElementById('stats-details');
-        const button = document.getElementById('toggle-info-btn');
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleButtons = document.querySelectorAll(".stats-toggle-btn");
 
-        panel.classList.toggle('open');
+    toggleButtons.forEach(button => {
+        const targetId = button.getAttribute("data-target");
+        const panel = document.getElementById(targetId);
 
-        if (panel.classList.contains('open')) {
-            button.textContent = 'Hide additional stats';
-        } else {
-            button.textContent = 'Show additional stats';
-        }
-    }
+        if (!panel) return;
 
-function toggleModelDetails() {
-        const panel = document.getElementById('model-details');
-        const button = document.getElementById('toggle-model-btn');
+        button.addEventListener("click", () => {
+            const isExpanded = button.getAttribute("aria-expanded") === "true";
 
-        panel.classList.toggle('open');
+            // Toggle classes
+            panel.classList.toggle("open");
+            panel.classList.toggle("collapsed");
 
-        if (panel.classList.contains('open')) {
-            button.textContent = 'Hide model details';
-        } else {
-            button.textContent = 'Show model details';
-        }
-    }
+            // Update aria-expanded
+            button.setAttribute("aria-expanded", (!isExpanded).toString());
+
+            // Opcional: Cambiar el texto del botón
+            const showText = button.getAttribute("data-show-text") || "Show details";
+            const hideText = button.getAttribute("data-hide-text") || "Hide details";
+            button.textContent = isExpanded ? showText : hideText;
+        });
+    });
+});
