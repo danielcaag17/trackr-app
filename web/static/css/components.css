@@ -1,30 +1,57 @@
-/* ================= COMPONENTES ================= */
+/* ================= COMPONENTS ================= */
 /* Buttons */
 button,
 .upload-btn,
 .auth-btn,
 .toggle-btn,
 .stats-toggle-btn,
-.contact-form button {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 8px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 5px;
+.contact-form button,
+.pagination-controls button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 5px;
 }
 
-button:hover {
-    background-color: var(--primary-hover);
+button:hover,
+.upload-btn:hover,
+.auth-btn:hover,
+.toggle-btn:hover,
+.stats-toggle-btn:hover,
+.contact-form button:hover,
+.pagination-controls button:hover {
+  background-color: var(--primary-hover);
 }
 
 .button-container {
     text-align: center;
     margin-top: 20px;
+}
+
+.pagination-controls button {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  margin-bottom: 0;
+}
+
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 /* Drop-down panels */
@@ -43,7 +70,7 @@ button:hover {
 .details-panel.open,
 #stats-details.open,
 #model-details.open {
-    max-height: 1500px;
+    max-height: none;
     padding: 15px;
 }
 
@@ -155,4 +182,16 @@ button:hover {
 .stat-label {
     font-size: 14px;
     color: #4b5563;
+}
+
+/* Canvas & Charts */
+.canvas-container {
+  width: 588px;
+  height: 500px;
+}
+
+canvas#durationBarChart {
+  width: 100%;
+  height: 100%;
+  display: block;
 }

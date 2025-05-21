@@ -5,7 +5,6 @@
 {% block head %}
     <script src="{% static 'js/show_details.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{%  static 'js/people_detections.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -76,13 +75,30 @@
             <!-- Detections Chart -->
             <article class="stats-card">
               <h3 class="stats-title">Detections per frame</h3>
-              <canvas id="detectionsChart" width="600" height="300"></canvas>
+              <canvas id="detectionsChart" width="500" height="300"></canvas>
             </article>
+
+            <!-- Time per person Chart -->
+            <article class="stats-card">
+                <h3 class="stats-title">Timer per person</h3>
+                <div class="canvas-container">
+                    <canvas id="durationBarChart" width="588" height="500"></canvas>
+                </div>
+                <div class="pagination-controls">
+                    <button id="prevPage" disabled>⟵ Previous</button>
+                    <span id="pageIndicator">Page 1</span>
+                    <button id="nextPage">Next ⟶</button>
+                </div>
+            </article>
+
             <script>
                 const video = {
-                    detections_per_frame: {{ video.detections_per_frame|safe }}
+                    detections_per_frame: {{ video.detections_per_frame|safe }},
+                    time_per_person: {{ video.time_per_person|safe }}
                 };
             </script>
+            <script src="{%  static 'js/people_detections.js' %}"></script>
+            <script src="{% static 'js/time_per_person.js' %}"></script>
         </section>
 
         <!-- Model button -->
