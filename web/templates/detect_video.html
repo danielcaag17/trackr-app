@@ -4,6 +4,8 @@
 
 {% block head %}
     <script src="{% static 'js/show_details.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{%  static 'js/people_detections.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -37,7 +39,7 @@
 
         <!-- Stats button -->
         <div class="button-container">
-            <button id="toggle-info-btn" class="stats-toggle-btn" aria-expanded="false"  data-target="stats-details"
+            <button id="toggle-info-btn" class="stats-toggle-btn" aria-expanded="false" data-target="stats-details"
                     data-show-text="Show additional stats" data-hide-text="Hide additional stats">
                 Show additional stats
             </button>
@@ -70,11 +72,22 @@
                             class="muted">(frame #{{ video.peak_frame_id }})</span></li>
                 </ul>
             </article>
+
+            <!-- Detections Chart -->
+            <article class="stats-card">
+              <h3 class="stats-title">Detections per frame</h3>
+              <canvas id="detectionsChart" width="600" height="300"></canvas>
+            </article>
+            <script>
+                const video = {
+                    detections_per_frame: {{ video.detections_per_frame|safe }}
+                };
+            </script>
         </section>
 
         <!-- Model button -->
         <div class="button-container">
-            <button id="toggle-model-btn" class="stats-toggle-btn" aria-expanded="false"  data-target="model-details"
+            <button id="toggle-model-btn" class="stats-toggle-btn" aria-expanded="false" data-target="model-details"
                     data-show-text="Show model stats" data-hide-text="Hide model stats">
                 Show model details
             </button>
