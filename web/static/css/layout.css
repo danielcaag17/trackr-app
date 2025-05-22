@@ -1,0 +1,131 @@
+/* ================= LAYOUT ================= */
+
+header, footer {
+  position: fixed;
+  width: 100%;
+  background-color: #1f2937;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+header {
+  height: 50px;
+  top: 0;
+}
+
+footer {
+  height: 60px;
+  bottom: 0;
+}
+
+.main-wrapper {
+  display: flex;
+  padding: 10px 40px;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.main-wrapper.centered {
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 150px);
+  margin: 65px auto 75px;
+}
+
+.main-wrapper.boxed {
+  flex-direction: column;
+  max-width: 700px;
+  margin: 70px auto 80px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  min-height: calc(100vh - 40px - 50px - 60px);
+}
+
+.main-wrapper.boxed.about-page,
+.main-wrapper.boxed.contact-page {
+  overflow: hidden;
+  width: 100%;
+}
+
+.main-wrapper.boxed.legal-page {}
+
+.center-content {
+  max-width: 600px;
+  text-align: center;
+  margin-top: 0;
+  padding-top: 0;
+  width: 100%;
+}
+
+.main-title {
+  margin-block-start: 10px;
+  font-size: 35px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.divider {
+  width: 50px;
+  height: 2px;
+  background-color: #2563eb;
+  margin: 10px auto -5px;
+  border: none;
+}
+
+.description {
+  font-size: 15px;
+  color: #4b5563;
+  margin-bottom: 20px;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.menu a {
+    margin-right: 20px;
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.header .logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.header .logo-img {
+  height: 28px;
+  margin-right: 10px;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 10px 5px;
+    font-size: 14px;
+    color: #9ca3af;
+    background-color: #f3f4f6;
+}
+
+.footer a {
+    color: #9ca3af;
+    text-decoration: none;
+    margin: 5px 5px;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

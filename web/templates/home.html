@@ -1,51 +1,63 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Trackr - Video Analysis</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header class="header">
-        <div class="logo">👁 SightiQ</div>
-        <div class="menu">
-            <a href="#">Settings</a>
-            <button class="upload-btn">Upload</button>
-        </div>
-    </header>
+{% block title %}Trackr - Video Analysis{% endblock %}
 
-    <main class="container">
-        <div class="video-box">
-            <div class="video-preview">[VIDEO PLACEHOLDER]</div>
-            <p class="filename">example.mp4</p>
-            <p class="status">🔄 Analyzing video...</p>
-        </div>
+{% block head %}
+    <script src="{% static 'js/upload.js' %}"></script>
+{% endblock %}
 
-        <div class="summary">
-            <div class="card">
-                <div class="icon">👥</div>
-                <div class="info">
-                    <p class="label">15 People</p>
-                    <p class="desc">Detected</p>
+{% block content %}
+    <main class="main-wrapper centered">
+        <div class="center-content">
+            <h1 class="main-title">Detect People in<br>Your Videos</h1>
+            <hr class="divider"/>
+            <p class="description">
+                Upload a video, and our model will identify the people present and generate related statistics.
+            </p>
+
+            <form id="upload-form" method="POST" enctype="multipart/form-data" class="upload-form">
+                {% csrf_token %}
+
+                <label for="video-input" class="upload-label">Select the desired video</label>
+                <label for="video-input" class="custom-file-upload upload-btn">
+                    Choose File
+                </label>
+                <div id="file-name" class="file-name">No file selected</div>
+                <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
+
+                <!-- Button tooltip -->
+                <div class="tooltip-container">
+                    <button type="button" class="upload-btn disabled-btn" disabled>
+                        Upload Video
+                    </button>
+                    <span class="tooltip-text">
+                        This feature is under development. Check predefined videos.
+                    </span>
                 </div>
-            </div>
-            <div class="card">
-                <div class="icon">⏱</div>
-                <div class="info">
-                    <p class="label">Most Frequent</p>
-                    <p class="desc">Person A</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="icon">📊</div>
-                <div class="info">
-                    <p class="label">Duration</p>
-                    <p class="desc">0m 14s</p>
-                </div>
+                <a href="/predefined-videos" class="predefined-link">Or see predefined videos</a>
+            </form>
+
+
+            <!--
+            <form id="upload-form" action="{% url 'api_upload_video' %}" method="POST" enctype="multipart/form-data"
+                  class="upload-form">
+                {% csrf_token %}
+
+                <label for="video-input" class="upload-label">Select the desired video</label>
+                <label for="video-input" class="custom-file-upload upload-btn">
+                    Choose File
+                </label>
+                <div id="file-name" class="file-name">No file selected</div>
+                <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
+
+                <button type="submit" class="upload-btn">Upload Video</button>
+            </form>-->
+
+            <div class="info-hints">
+                <p><strong>Supported formats:</strong> MP4, AVI, MOV · Max 500MB</p>
+                <p><strong>Processing time:</strong> Usually under 1 minute</p>
+                <p><strong>Privacy:</strong> We don’t store your videos. All processing is secure and local.</p>
             </div>
         </div>
     </main>
-</body>
-</html>
+{% endblock %}

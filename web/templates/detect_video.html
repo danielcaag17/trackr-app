@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Detected Video - Trackr{% endblock %}
+
+{% block head %}
+    <script src="{% static 'js/show_details.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+    <main class="main-detect-video">
+        <!-- Video -->
+        <section class="video-container">
+            <video width="640" height="360" controls>
+                <source src="{{ video.public_url }}" type="video/mp4">
+                Your browser does not support HTML5 video.
+            </video>
+            <p class="video-title">
+                <em>{{ video.title }}</em>
+            </p>
+        </section>
+
+        <!-- Stats summary -->
+        <section class="summary-stats">
+            <div class="stat-box">
+                <div class="stat-value">{{ video.people_detected }}</div>
+                <div class="stat-label">People<br>Detected</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">{{ video.avg_people_per_frame }}</div>
+                <div class="stat-label">Average people<br>per frame</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">{{ video.person_presence_percent|floatformat:2 }}%</div>
+                <div class="stat-label">Person Presence</div>
+            </div>
+        </section>
+
+        <!-- Stats button -->
+        <div class="button-container">
+            <button id="toggle-info-btn" class="stats-toggle-btn" aria-expanded="false" data-target="stats-details"
+                    data-show-text="Show additional stats" data-hide-text="Hide additional stats">
+                Show additional stats
+            </button>
+        </div>
+
+        <!-- Stats panel -->
+        <section id="stats-details" class="details-panel collapsed">
+            <article class="stats-card">
+                <h3 class="stats-title">Video Stats</h3>
+                <ul class="stats-list">
+                    <li><strong>Frames processed:</strong> {{ video.frame_processed }}</li>
+                    <li><strong>Video duration:</strong> {{ video.video_duration }} sec</li>
+                    <li><strong>Frame rate:</strong> {{ video.video_fps }} fps</li>
+                    <li><strong>Processing time:</strong> {{ video.processing_time_seconds }} sec</li>
+                    <li><strong>Confidence threshold:</strong> {{ video.confidence_threshold }}</li>
+                </ul>
+            </article>
+
+            <article class="stats-card">
+                <h3 class="stats-title">Model Analysis</h3>
+                <ul class="stats-list">
+                    <li><strong>Total detections:</strong> {{ video.total_detections }}</li>
+                    <li><strong>Detections discarded:</strong> {{ video.detections_discarded }}</li>
+                    <li><strong>Frames with detections:</strong> {{ video.frames_with_detections }}</li>
+                    <li><strong>People detected:</strong> {{ video.people_detected }}</li>
+                    <li><strong>Average confidence:</strong> {{ video.avg_confidence|floatformat:4 }}</li>
+                    <li><strong>Average people per frame:</strong> {{ video.avg_people_per_frame }}</li>
+                    <li><strong>Person presence:</strong> {{ video.person_presence_percent|floatformat:2 }}%</li>
+                    <li><strong>Peak people in frame:</strong> {{ video.peak_count }} <span
+                            class="muted">(frame #{{ video.peak_frame_id }})</span></li>
+                </ul>
+            </article>
+
+            <!-- Detections Chart -->
+            <article class="stats-card">
+              <h3 class="stats-title">Detections per frame</h3>
+              <canvas id="detectionsChart" width="500" height="300"></canvas>
+            </article>
+
+            <!-- Time per person Chart -->
+            <article class="stats-card">
+                <h3 class="stats-title">Timer per person</h3>
+                <div class="canvas-container">
+                    <canvas id="durationBarChart" width="588" height="500"></canvas>
+                </div>
+                <div class="pagination-controls">
+                    <button id="prevPage" disabled>⟵ Previous</button>
+                    <span id="pageIndicator">Page 1</span>
+                    <button id="nextPage">Next ⟶</button>
+                </div>
+            </article>
+
+            <script>
+                const video = {
+                    detections_per_frame: {{ video.detections_per_frame|safe }},
+                    time_per_person: {{ video.time_per_person|safe }}
+                };
+            </script>
+            <script src="{%  static 'js/people_detections.js' %}"></script>
+            <script src="{% static 'js/time_per_person.js' %}"></script>
+        </section>
+
+        <!-- Model button -->
+        <div class="button-container">
+            <button id="toggle-model-btn" class="stats-toggle-btn" aria-expanded="false" data-target="model-details"
+                    data-show-text="Show model stats" data-hide-text="Hide model stats">
+                Show model details
+            </button>
+        </div>
+
+        <!-- Panel modelo -->
+        <section id="model-details" class="details-panel collapsed">
+            <article class="stats-card">
+                <h3 class="stats-title">Model Metrics</h3>
+                <ul class="stats-list">
+                    <li><strong>Model name:</strong> {{ ml_model.model_name }}</li>
+                    <li><strong>Description:</strong> {{ ml_model.description }}</li>
+                    <li><strong>Train box loss:</strong> {{ model_metrics.train_box_loss|floatformat:4 }}</li>
+                    <li><strong>Train classification loss:</strong> {{ model_metrics.train_cls_loss|floatformat:4 }}
+                    </li>
+                    <li><strong>Train distributed focal loss:</strong> {{ model_metrics.train_dfl_loss|floatformat:4 }}
+                    </li>
+                    <li><strong>Validation box loss:</strong> {{ model_metrics.val_box_loss|floatformat:4 }}</li>
+                    <li><strong>Validation classification loss:</strong> {{ model_metrics.val_cls_loss|floatformat:4 }}
+                    </li>
+                    <li><strong>Validation distributed focal
+                        loss:</strong> {{ model_metrics.val_dfl_loss|floatformat:4 }}</li>
+                    <li><strong>Validation Precision:</strong> {{ model_metrics.val_precision|floatformat:4 }}</li>
+                    <li><strong>Validation Recall:</strong> {{ model_metrics.val_recall|floatformat:4 }}</li>
+                    <li><strong>Validation mAP50:</strong> {{ model_metrics.val_map50|floatformat:4 }}</li>
+                    <li><strong>Validation mAP50-95:</strong> {{ model_metrics.val_map50_95|floatformat:4 }}</li>
+                </ul>
+            </article>
+
+            <article class="stats-card">
+                <h3 class="stats-title">Tracker Info</h3>
+                <ul class="stats-list">
+                    <li><strong>IOU Threshold:</strong> {{ tracker.iou_threshold }}</li>
+                    <li><strong>Max Age:</strong> {{ tracker.max_age }}</li>
+                    <li><strong>Min Hits:</strong> {{ tracker.min_hits }}</li>
+                </ul>
+            </article>
+        </section>
+    </main>
+{% endblock %}

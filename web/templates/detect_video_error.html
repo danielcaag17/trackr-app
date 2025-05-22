@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Detected Video - Trackr{% endblock %}
+
+{% block content %}
+    <h1>Resultado erróneo de detección</h1>
+    <div class="alert alert-danger">
+        <strong>Error {{ code }}:</strong> {{ error }}
+    </div>
+{% endblock %}
