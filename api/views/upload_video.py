@@ -16,9 +16,12 @@ fastapi_url_post = 'https://trackr-ml-api.onrender.com/api/video/detect'
 FASTAPI_GET = True
 
 
-def get_method():
+def get_method(file_name):
     s3_url = "https://s3-us-west-2.amazonaws.com"  # An example of s3 url
-    response = requests.get(fastapi_url_get)
+    params = {
+        'file_name': file_name + "_detected"
+    }
+    response = requests.get(fastapi_url_get, params=params)
     return s3_url, response
 
 
@@ -43,7 +46,7 @@ def upload_video(request):
             video_id = str(uuid.uuid4()).replace('-', '')  # Assign an ID to the video
 
             if FASTAPI_GET:
-                s3_url, response = get_method()
+                s3_url, response = get_method(video_file.name)
             else:
                 s3_url, response = post_method(video_file, video_id, user)
 
@@ -51,7 +54,7 @@ def upload_video(request):
                 error_msg = quote("FastAPI returned error")
                 return redirect(f"/detect/error/?error={error_msg}&code=502")
 
-            public_url = generate_public_url(video_file)
+            public_url = generate_public_url(video_file.name)
             detection_data = response.json()
 
             # Save data to the corresponding models
@@ -98,7 +101,7 @@ def upload_video(request):
             video_detection_result = VideoDetectionResult.objects.create(
                 title=video_file.name,
                 autor=user,
-                s3_url=s3_url,
+                s3_url=detection_data["processed_video"],
                 original_video=video,
                 public_url=public_url,
                 tracker=tracker,

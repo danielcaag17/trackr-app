@@ -26,7 +26,7 @@ def upload_s3(video_file, video_id, user):
 
 
 # With a video_file name generate its public url
-def generate_public_url(video_file):
+def generate_public_url(video_file_name):
     # Create s3 client
     s3 = boto3.client(
         's3',
@@ -36,7 +36,7 @@ def generate_public_url(video_file):
     )
 
     # Adapt the name as it is saved in s3
-    name = video_file.name.split('.')[0]
+    name = video_file_name.split('.')[0]
     name = name + "_detected.mp4"
     s3_file_key = f"detections/{name}"
 

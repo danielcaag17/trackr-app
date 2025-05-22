@@ -6,6 +6,7 @@ urlpatterns = [
     path('about', views.about, name='about'),
     path('legal', views.legal, name='legal'),
     path('contact', views.contact, name='contact'),
+    path('predefined-videos', views.predefined_videos, name='predefined_videos'),
     path('detect/error/', views.detect_video_error, name='detect_video_error'),
     path('detect/<str:video_id>', views.detect_video, name='detect_video'),
 ]

@@ -8,7 +8,7 @@
         <div class="video-grid">
             {% for image in images %}
                 <div class="video-card">
-                    <a href="{% url 'detect_video' video_id=image|slice:":-4" %}"
+                    <a href="{% url 'api_predefined_videos'%}?video_id={{ image|slice:":-4" }}"
                        aria-label="See video {{ image|slice:":-4" }}.mp4">
                         <img src="{% static 'predefined-videos/' %}{{ image }}" alt="Image of {{ image }}"
                              class="video-thumb">

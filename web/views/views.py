@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from api.models import Video, VideoDetectionResult
+import os
+from django.conf import settings
 
 
 # Create your views here.
@@ -49,3 +51,14 @@ def detect_video_error(request):
         'error': error,
         'code': code
     })
+
+
+def predefined_videos(request):
+    images_dir = os.path.join(settings.STATIC_ROOT, 'predefined-videos')
+
+    images = []
+    for filename in os.listdir(images_dir):
+        if filename.endswith('.jpg'):
+            images.append(filename)
+
+    return render(request, 'predefined-videos.html', {'images': images})
