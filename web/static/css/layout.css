@@ -32,7 +32,7 @@ footer {
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 150px);
-  margin: 70px auto 80px;
+  margin: 65px auto 75px;
 }
 
 .main-wrapper.boxed {
