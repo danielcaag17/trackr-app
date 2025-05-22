@@ -4,18 +4,43 @@
 
 {% block head %}
     <script src="{% static 'js/upload.js' %}"></script>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
     <main class="main-wrapper centered">
         <div class="center-content">
             <h1 class="main-title">Detect People in<br>Your Videos</h1>
-            <hr class="divider" />
+            <hr class="divider"/>
             <p class="description">
                 Upload a video, and our model will identify the people present and generate related statistics.
             </p>
 
-            <form id="upload-form" action="{% url 'api_upload_video' %}" method="POST" enctype="multipart/form-data" class="upload-form">
+            <form id="upload-form" method="POST" enctype="multipart/form-data" class="upload-form">
+                {% csrf_token %}
+
+                <label for="video-input" class="upload-label">Select the desired video</label>
+                <label for="video-input" class="custom-file-upload upload-btn">
+                    Choose File
+                </label>
+                <div id="file-name" class="file-name">No file selected</div>
+                <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
+
+                <!-- Button tooltip -->
+                <div class="tooltip-container">
+                    <button type="button" class="upload-btn disabled-btn" disabled>
+                        Upload Video
+                    </button>
+                    <span class="tooltip-text">
+                        This feature is under development. Check predefined videos.
+                    </span>
+                </div>
+                <a href="/predefined-videos" class="predefined-link">Or see predefined videos</a>
+            </form>
+
+
+            <!--
+            <form id="upload-form" action="{% url 'api_upload_video' %}" method="POST" enctype="multipart/form-data"
+                  class="upload-form">
                 {% csrf_token %}
 
                 <label for="video-input" class="upload-label">Select the desired video</label>
@@ -26,7 +51,7 @@
                 <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
 
                 <button type="submit" class="upload-btn">Upload Video</button>
-            </form>
+            </form>-->
 
             <div class="info-hints">
                 <p><strong>Supported formats:</strong> MP4, AVI, MOV · Max 500MB</p>

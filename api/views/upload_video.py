@@ -1,84 +1,71 @@
-from django.http import JsonResponse
 from ..models import Video, VideoDetectionResult, User, Tracker, MLModel, ModelMetrics
 from django.shortcuts import redirect
 import requests
-import tempfile
 from urllib.parse import quote
 import uuid
-from django.conf import settings
 from django.utils.timezone import now
-import boto3
-from qtfaststart import processor
+from ..utils import generate_public_url, upload_s3, convert_url
 
-# Should not be this URL but because of using render I have to use ti
-fastapi_url = 'https://trackr-ml-api.onrender.com/api/video/response'
+'''
+If render had more resources, fastapi_url_post would be enough, 
+but since it doesn't, a get request is made which is less expensive.
+'''
+fastapi_url_get = 'https://trackr-ml-api.onrender.com/api/video/response'
+fastapi_url_post = 'https://trackr-ml-api.onrender.com/api/video/detect'
+
+FASTAPI_GET = True
 
 
-def upload_s3(video_file, video_id, user):
-    s3 = boto3.client(
-        's3',
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        region_name=settings.AWS_S3_REGION_NAME
-    )
+def get_method(file_name):
+    s3_url = "https://s3-us-west-2.amazonaws.com"  # An example of s3 url
+    params = {
+        'file_name': file_name + "_detected"
+    }
+    response = requests.get(fastapi_url_get, params=params)
+    return s3_url, response
 
-    s3_file_key = f"original_videos/{video_file.name}"
 
-    s3.upload_fileobj(
-        video_file,
-        settings.AWS_STORAGE_BUCKET_NAME,
-        s3_file_key,
-        ExtraArgs={'ContentType': 'video/mp4'}
-        # 'ContentType': video_file.content_type
-    )
+def post_method(video_file, video_id, user):
+    s3_url = upload_s3(video_file, video_id, user)  # Save video in S3
 
-    # Generar URL firmada (válida por 1 hora)
-    public_url = s3.generate_presigned_url(
-        ClientMethod='get_object',
-        Params={
-            'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-            'Key': s3_file_key
-        },
-        ExpiresIn=3600  # 1 hora
-    )
-
-    s3_url = f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/{s3_file_key}"
-    return s3_url, public_url
+    # Call to the API
+    request_body = {
+        "video_s3_url": convert_url(s3_url),
+        "threshold": 0.4,
+        "ml_model": "small-basic.pt"
+    }
+    response = requests.post(fastapi_url_post, json=request_body)
+    return s3_url, response
 
 
 def upload_video(request):
-    # tambien se puede hacer request.FILES.get('video'), por si falla
     if request.method == 'POST' and request.FILES['video']:
         try:
             user = User.objects.get(username="default")
             video_file = request.FILES.get('video')
             video_id = str(uuid.uuid4()).replace('-', '')  # Assign an ID to the video
 
-            # s3_url, public_url = upload_s3(video_file, video_id, user)  # Save vidoe in S3
-            # todo: quitar el cometnario de arriba, ahora es solo para testear
-            s3_url = "https://s3-us-west-2.amazonaws.com"
-            public_url = "https://s3-us-west-2.amazonaws.com"
+            if FASTAPI_GET:
+                s3_url, response = get_method(video_file.name)
+            else:
+                s3_url, response = post_method(video_file, video_id, user)
 
-            # Save the video
+            if response.status_code != 200:
+                error_msg = quote("FastAPI returned error")
+                return redirect(f"/detect/error/?error={error_msg}&code=502")
+
+            public_url = generate_public_url(video_file.name)
+            detection_data = response.json()
+
+            # Save data to the corresponding models
             video = Video.objects.create(
                 id=video_id,
                 title=video_file.name,
                 autor=user,
                 s3_url=s3_url,
-                public_url=public_url,
                 uploaded_at=now(),
             )
 
-            # Call to the API
-            response = requests.get(fastapi_url)
-
-            if response.status_code != 200:
-                error_msg = quote("FastAPI devolvió error")
-                return redirect(f"/detect/error/?error={error_msg}&code=502")
-
-            detection_data = response.json()
-
-            # Save data to the corresponding models
             tracker_info = detection_data["metadata"]["tracker_info"]
             tracker = Tracker.objects.create(
                 iou_threshold=tracker_info["iou_threshold"],
@@ -114,8 +101,9 @@ def upload_video(request):
             video_detection_result = VideoDetectionResult.objects.create(
                 title=video_file.name,
                 autor=user,
-                s3_url=s3_url,
+                s3_url=detection_data["processed_video"],
                 original_video=video,
+                public_url=public_url,
                 tracker=tracker,
                 ml_model=ml_model,
                 frame_processed=metadata["frames_processed"],
@@ -136,13 +124,13 @@ def upload_video(request):
                 time_per_person=statistics["time_per_person"]
             )
 
-            # Eliminar video en s3 y la detección (todo al tanto de si se puede ver el video)
+            # todo Eliminar video en s3 y la detección (al tanto de si se puede ver el video)
 
             return redirect('detect_video', video_id=video_detection_result.original_video.id)
         except Exception as e:
-            error_msg = quote(str(e))  # Codifica para URL
+            error_msg = quote(str(e))  # Encode for URL
             return redirect(f"/detect/error/?error={error_msg}&code=500")
 
-    # Si no es POST válido
-    error_msg = quote("Método no permitido o archivo no enviado")
+    # If it is not a valid POST
+    error_msg = quote("Method not allowed or file not sent")
     return redirect(f"/detect/error/?error={error_msg}&code=400")

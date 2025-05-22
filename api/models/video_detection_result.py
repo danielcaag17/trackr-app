@@ -10,6 +10,7 @@ class VideoDetectionResult(models.Model):
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
     s3_url = models.URLField(max_length=500)
     original_video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    public_url = models.URLField(max_length=500, default='https://s3-us-west-2.amazonaws.com')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     tracker = models.ForeignKey(Tracker, on_delete=models.CASCADE, default=1)
     ml_model = models.ForeignKey(MLModel, on_delete=models.CASCADE, default=1)

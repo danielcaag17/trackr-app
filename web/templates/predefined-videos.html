@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Predefined videos - Trackr{% endblock %}
+
+{% block content %}
+    <div class="video-gallery-container">
+        <h2 class="section-title">Predefined Videos</h2>
+        <div class="video-grid">
+            {% for image in images %}
+                <div class="video-card">
+                    <a href="{% url 'api_predefined_videos'%}?video_id={{ image|slice:":-4" }}"
+                       aria-label="See video {{ image|slice:":-4" }}.mp4">
+                        <img src="{% static 'predefined-videos/' %}{{ image }}" alt="Image of {{ image }}"
+                             class="video-thumb">
+                        <div class="video-info">
+                            <p class="video-name">{{ image|slice:":-4" }}.mp4</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
