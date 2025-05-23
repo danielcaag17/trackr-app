@@ -27,7 +27,11 @@ def predefined_videos(request):
     public_url = generate_public_url(video_name)
     detection_data = response.json()
 
-    user = User.objects.get(username="default")
+    user, created = User.objects.get_or_create(
+        username="default",
+        defaults={"email": "default@example.com"}
+    )
+
     video_id = str(uuid.uuid4()).replace('-', '')
 
     # Save data to the corresponding models

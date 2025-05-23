@@ -41,7 +41,10 @@ def post_method(video_file, video_id, user):
 def upload_video(request):
     if request.method == 'POST' and request.FILES['video']:
         try:
-            user = User.objects.get(username="default")
+            user, created = User.objects.get_or_create(
+                username="default",
+                defaults={"email": "default@example.com"}
+            )
             video_file = request.FILES.get('video')
             video_id = str(uuid.uuid4()).replace('-', '')  # Assign an ID to the video
 
