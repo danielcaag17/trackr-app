@@ -30,7 +30,8 @@ DEBUG = os.environ.get("DJANGO_DEBUG") == "true"
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
-    "localhost"
+    "localhost",
+    ".onrender.com"
 ]
 
 
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'trackr.urls'
