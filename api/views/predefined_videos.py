@@ -21,7 +21,7 @@ def predefined_videos(request):
         'file_name': video_name + "_detected"
     }
 
-    if RUNNING_LOCAL:
+    if not RUNNING_LOCAL:
         fastapi_url_get = settings.API_URL + 'api/video/response'
     else:
         fastapi_url_get = 'http://127.0.0.1:5000' + '/api/video/response'
