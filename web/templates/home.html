@@ -15,43 +15,46 @@
                 Upload a video, and our model will identify the people present and generate related statistics.
             </p>
 
-            <form id="upload-form" method="POST" enctype="multipart/form-data" class="upload-form">
-                {% csrf_token %}
+            {% if running_local != 'true' %}
+                <form id="upload-form" method="POST" enctype="multipart/form-data" class="upload-form">
+                    {% csrf_token %}
 
-                <label for="video-input" class="upload-label">Select the desired video</label>
-                <label for="video-input" class="custom-file-upload upload-btn">
-                    Choose File
-                </label>
-                <div id="file-name" class="file-name">No file selected</div>
-                <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
+                    <label for="video-input" class="upload-label">Select the desired video</label>
+                    <label for="video-input" class="custom-file-upload upload-btn">
+                        Choose File
+                    </label>
+                    <div id="file-name" class="file-name">No file selected</div>
+                    <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
 
-                <!-- Button tooltip -->
-                <div class="tooltip-container">
-                    <button type="button" class="upload-btn disabled-btn" disabled>
-                        Upload Video
-                    </button>
-                    <span class="tooltip-text">
-                        This feature is under development. Check predefined videos.
-                    </span>
-                </div>
-                <a href="/predefined-videos" class="predefined-link">Or see predefined videos</a>
-            </form>
+                    <!-- Button tooltip -->
+                    <div class="tooltip-container">
+                        <button type="button" class="upload-btn disabled-btn" disabled>
+                            Upload Video
+                        </button>
+                        <span class="tooltip-text">
+                            This feature is under development. Check predefined videos.
+                        </span>
+                    </div>
+                    <a href="/predefined-videos" class="predefined-link">Or see predefined videos</a>
+                </form>
 
+            {% else %}
+                <form id="upload-form" action="{% url 'api_upload_video' %}" method="POST" enctype="multipart/form-data"
+                      class="upload-form">
+                    {% csrf_token %}
 
-            <!--
-            <form id="upload-form" action="{% url 'api_upload_video' %}" method="POST" enctype="multipart/form-data"
-                  class="upload-form">
-                {% csrf_token %}
+                    <label for="video-input" class="upload-label">Select the desired video</label>
+                    <label for="video-input" class="custom-file-upload upload-btn">
+                        Choose File
+                    </label>
+                    <div id="file-name" class="file-name">No file selected</div>
+                    <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
 
-                <label for="video-input" class="upload-label">Select the desired video</label>
-                <label for="video-input" class="custom-file-upload upload-btn">
-                    Choose File
-                </label>
-                <div id="file-name" class="file-name">No file selected</div>
-                <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
+                    <button type="submit" class="upload-btn">Upload Video</button>
+                    <a href="/predefined-videos" class="predefined-link">Or see predefined videos</a>
+                </form>
 
-                <button type="submit" class="upload-btn">Upload Video</button>
-            </form>-->
+            {% endif %}
 
             <div class="info-hints">
                 <p><strong>Supported formats:</strong> MP4, AVI, MOV · Max 500MB</p>

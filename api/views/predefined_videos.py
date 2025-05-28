@@ -5,8 +5,9 @@ from ..utils import generate_public_url
 from ..models import Video, VideoDetectionResult, Tracker, User, ModelMetrics, MLModel
 from django.utils.timezone import now
 import uuid
+from django.conf import settings
 
-fastapi_url_get = 'https://trackr-ml-api.onrender.com/api/video/response'
+RUNNING_LOCAL = settings.RUNNING_LOCAL == "true"
 
 
 def predefined_videos(request):
@@ -19,6 +20,12 @@ def predefined_videos(request):
     params = {
         'file_name': video_name + "_detected"
     }
+
+    if RUNNING_LOCAL:
+        fastapi_url_get = settings.API_URL + 'api/video/response'
+    else:
+        fastapi_url_get = 'http://127.0.0.1:5000' + '/api/video/response'
+
     response = requests.get(fastapi_url_get, params=params)
     if response.status_code != 200:
         error_msg = quote("FastAPI returned error")

@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
+from decouple import config
 
 
 load_dotenv()
@@ -29,6 +30,9 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG") == "true"
+
+RUNNING_LOCAL = config('RUNNING_LOCAL', default='false')  # Lee la variable desde el .env
+API_URL = config('API_URL', default='')
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
