@@ -5,15 +5,14 @@ from urllib.parse import quote
 import uuid
 from django.utils.timezone import now
 from ..utils import generate_public_url, upload_s3, convert_url
+import os
+from django.conf import settings
 
 '''
 If render had more resources, fastapi_url_post would be enough, 
 but since it doesn't, a get request is made which is less expensive.
 '''
-fastapi_url_get = 'https://trackr-ml-api.onrender.com/api/video/response'
-fastapi_url_post = 'https://trackr-ml-api.onrender.com/api/video/detect'
-
-FASTAPI_GET = True
+RUNNING_LOCAL = settings.RUNNING_LOCAL == "true"
 
 
 def get_method(file_name):
@@ -21,6 +20,10 @@ def get_method(file_name):
     params = {
         'file_name': file_name + "_detected"
     }
+    if RUNNING_LOCAL:
+        fastapi_url_get = 'http://127.0.0.1:5000/' + 'api/video/response'
+    else:
+        fastapi_url_get = settings.API_URL + 'api/video/response'
     response = requests.get(fastapi_url_get, params=params)
     return s3_url, response
 
@@ -32,8 +35,12 @@ def post_method(video_file, video_id, user):
     request_body = {
         "video_s3_url": convert_url(s3_url),
         "threshold": 0.4,
-        "ml_model": "small-basic.pt"
+        "ml_model": "nano-G.pt"
     }
+    if RUNNING_LOCAL:
+        fastapi_url_post = 'http://127.0.0.1:5000/' + 'api/video/detect'
+    else:
+        fastapi_url_post = settings.API_URL + 'api/video/detect'
     response = requests.post(fastapi_url_post, json=request_body)
     return s3_url, response
 
@@ -48,13 +55,14 @@ def upload_video(request):
             video_file = request.FILES.get('video')
             video_id = str(uuid.uuid4()).replace('-', '')  # Assign an ID to the video
 
-            if FASTAPI_GET:
+            if not RUNNING_LOCAL:
                 s3_url, response = get_method(video_file.name)
             else:
                 s3_url, response = post_method(video_file, video_id, user)
 
             if response.status_code != 200:
-                error_msg = quote("FastAPI returned error")
+                error_msg = f"Error: {response.status_code} - {response.text}"
+                error_msg = quote(error_msg)
                 return redirect(f"/detect/error/?error={error_msg}&code=502")
 
             public_url = generate_public_url(video_file.name)

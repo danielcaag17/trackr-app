@@ -6,7 +6,10 @@ from django.conf import settings
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    context = {
+        'running_local': settings.RUNNING_LOCAL
+    }
+    return render(request, 'home.html', context)
 
 
 def about(request):
