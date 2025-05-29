@@ -3,8 +3,8 @@ import boto3
 import urllib.parse
 
 
-# Upload the video_file to s3
-def upload_s3(video_file, video_id, user):
+# Upload video_file to s3
+def upload_s3(video_file, video_id, user):  # Now video_id and user are not used, it would be when managing users
     s3 = boto3.client(
         's3',
         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -40,7 +40,7 @@ def generate_public_url(video_file_name):
     name = name + "_detected.mp4"
     s3_file_key = f"detections/{name}"
 
-    # Generar URL firmada (válida por 1 hora)
+    # Generate signed URL (just valid for 1 hour)
     public_url = s3.generate_presigned_url(
         ClientMethod='get_object',
         Params={
@@ -52,7 +52,7 @@ def generate_public_url(video_file_name):
     return public_url
 
 
-# Convert the S3 URL to a valid format for the FastAPI
+# Convert the S3 URL to a valid format for FastAPI
 def convert_url(s3_url):
     parsed_url = urllib.parse.urlparse(s3_url)
 
