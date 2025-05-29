@@ -15,7 +15,22 @@
                 Upload a video, and our model will identify the people present and generate related statistics.
             </p>
 
-            {% if running_local != 'true' %}
+            {% if running_local %}
+                <form id="upload-form" action="{% url 'api_upload_video' %}" method="POST" enctype="multipart/form-data"
+                      class="upload-form">
+                    {% csrf_token %}
+
+                    <label for="video-input" class="upload-label">Select the desired video</label>
+                    <label for="video-input" class="custom-file-upload upload-btn">
+                        Choose File
+                    </label>
+                    <div id="file-name" class="file-name">No file selected</div>
+                    <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
+
+                    <button type="submit" class="upload-btn">Upload Video</button>
+                    <a href="/predefined-videos" class="predefined-link">Or see predefined videos</a>
+                </form>
+            {% else %}
                 <form id="upload-form" method="POST" enctype="multipart/form-data" class="upload-form">
                     {% csrf_token %}
 
@@ -37,23 +52,6 @@
                     </div>
                     <a href="/predefined-videos" class="predefined-link">Or see predefined videos</a>
                 </form>
-
-            {% else %}
-                <form id="upload-form" action="{% url 'api_upload_video' %}" method="POST" enctype="multipart/form-data"
-                      class="upload-form">
-                    {% csrf_token %}
-
-                    <label for="video-input" class="upload-label">Select the desired video</label>
-                    <label for="video-input" class="custom-file-upload upload-btn">
-                        Choose File
-                    </label>
-                    <div id="file-name" class="file-name">No file selected</div>
-                    <input type="file" id="video-input" class="video-input" name="video" accept="video/*" required>
-
-                    <button type="submit" class="upload-btn">Upload Video</button>
-                    <a href="/predefined-videos" class="predefined-link">Or see predefined videos</a>
-                </form>
-
             {% endif %}
 
             <div class="info-hints">

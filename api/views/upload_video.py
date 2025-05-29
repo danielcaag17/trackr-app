@@ -6,7 +6,7 @@ import uuid
 from ..utils import *
 from django.conf import settings
 
-RUNNING_LOCAL = settings.RUNNING_LOCAL == "true"
+RUNNING_LOCAL = settings.RUNNING_LOCAL
 
 
 def post_method(video_file, video_id, user):
