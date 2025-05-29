@@ -35,7 +35,7 @@ body::-webkit-scrollbar {
     display: none;
 }
 
-/* ================= TEXTO ================= */
+/* ================= TEXT ================= */
 
 .muted {
     color: var(--text-muted);

@@ -13,7 +13,6 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
-from decouple import config
 
 
 load_dotenv()
@@ -31,8 +30,13 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG") == "true"
 
-RUNNING_LOCAL = config('RUNNING_LOCAL', default='false')  # Lee la variable desde el .env
-API_URL = config('API_URL', default='')
+RUNNING_LOCAL = os.environ.get('RUNNING_LOCAL') == "true"
+
+'''
+If render had more resources, fastapi_url_post would be enough, 
+but since it doesn't, a get request is made which is less expensive.
+'''
+API_URL = os.environ.get('API_URL')
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -108,10 +112,10 @@ AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_REGION_NAME = os.environ.get("AWS_REGION")
-AWS_QUERYSTRING_AUTH = False  # URLs públicas (True si necesitas firma segura)
+AWS_QUERYSTRING_AUTH = False  # Public URLs (Treu if a secure sign is needed)
 
-AWS_S3_FILE_OVERWRITE = False  # Evita sobrescribir archivos con mismo nombre, no debería pasar tampoco
-AWS_DEFAULT_ACL = None  # Recomendado por boto3
+AWS_S3_FILE_OVERWRITE = False  # Avoid overwriting files with the same name, it should not pass anyway
+AWS_DEFAULT_ACL = None  # Recommended by boto3
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

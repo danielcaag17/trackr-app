@@ -241,7 +241,7 @@ canvas#durationBarChart {
     border-color: var(--text-muted) transparent transparent transparent;
 }
 
-/* Predefined videos*/
+/* Predefined videos */
 .video-gallery-container {
     width: 85%;
     margin: 65px auto 75px;
