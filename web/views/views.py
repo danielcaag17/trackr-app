@@ -4,7 +4,6 @@ import os
 from django.conf import settings
 
 
-# Create your views here.
 def home(request):
     context = {
         'running_local': settings.RUNNING_LOCAL
@@ -35,6 +34,7 @@ def detect_video(request, video_id):
     tracker = video_detection_result.tracker
     ml_model = video_detection_result.ml_model
     model_metrics = ml_model.metrics
+
     context = {
         'video': video_detection_result,
         'tracker': tracker,

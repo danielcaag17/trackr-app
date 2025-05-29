@@ -70,6 +70,6 @@ document.getElementById("nextPage").addEventListener("click", () => {
     }
 });
 
-// Inicialización
+// Init
 renderChartPage(currentPage);
 
