@@ -46,7 +46,7 @@ def detect_video(request, video_id):
 
 
 def detect_video_error(request):
-    error = request.GET.get('error', 'Ha ocurrido un error desconocido.')
+    error = request.GET.get('error', 'Unknown error occurred')
     code = request.GET.get('code', '500')
     return render(request, 'detect_video_error.html', {
         'video': None,
