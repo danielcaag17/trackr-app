@@ -2,12 +2,12 @@ from django.db import models
 
 
 class ModelMetrics(models.Model):
-    # Entrenamiento
+    # Training loss
     train_box_loss = models.FloatField(null=True, blank=True)
     train_cls_loss = models.FloatField(null=True, blank=True)
     train_dfl_loss = models.FloatField(null=True, blank=True)
 
-    # Validación
+    # Validation loss
     val_box_loss = models.FloatField(null=True, blank=True)
     val_cls_loss = models.FloatField(null=True, blank=True)
     val_dfl_loss = models.FloatField(null=True, blank=True)

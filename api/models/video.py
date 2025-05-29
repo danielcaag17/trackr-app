@@ -10,8 +10,9 @@ class Video(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     '''
-    for now this, later when managing users, there would not be the default.
-    Now two random people cannot upload a video named equally
+    For now this (an autor can upload the same video several times)
+    Later, when managing users, there would not be the default user.
+    Now two random users cannot upload a video named equally for this reason (two random users uses the default user)
     class Meta:
         unique_together = ('title', 'autor')
     '''
