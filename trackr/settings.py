@@ -38,6 +38,9 @@ but since it doesn't, a get request is made which is less expensive.
 '''
 API_URL = os.environ.get('API_URL')
 
+JWT_SECRET = os.environ.get('JWT_SECRET')
+JWT_ALGORITHM = os.environ.get('JWT_ALGORITHM')
+
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",

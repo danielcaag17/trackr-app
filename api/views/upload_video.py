@@ -12,8 +12,11 @@ RUNNING_LOCAL = settings.RUNNING_LOCAL
 def post_method(video_file, video_id, user):
     s3_url = upload_s3(video_file, video_id, user)  # Save video in S3
 
+    # Call to the API
+    token = generate_token()
+    headers = {"Authorization": f"Bearer {token}"}
+
     try:
-        # Call to the API
         request_body = {
             "video_s3_url": convert_url(s3_url),
             "threshold": 0.4,
@@ -27,7 +30,7 @@ def post_method(video_file, video_id, user):
     else:
         fastapi_url_post = settings.API_URL
     fastapi_url_post += 'api/video/detect'
-    response = requests.post(fastapi_url_post, json=request_body)
+    response = requests.post(fastapi_url_post, headers=headers, json=request_body)
     return s3_url, response
 
 

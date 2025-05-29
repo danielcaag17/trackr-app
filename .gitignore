@@ -1,38 +1,36 @@
-# Entorno virtual
+# Virtual environment
 venv/
 ENV/
 env/
 .venv/
 
-# Archivos de Python compilados
+# Compiled Python files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Archivos de logs y bases de datos locales
+# Local log files and databases
 *.log
 *.sqlite3
 
-# Archivos de configuración del editor
+# Editor configuration files
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
 
-# Archivos de sistema
+# System files
 .DS_Store
 Thumbs.db
 
-# Archivos de migraciones (opcional ignorar si son temporales, aunque es buena práctica hacer commit de ellas)
-# Puedes comentar esta línea si quieres que las migraciones se incluyan
+# Migration files
 # */migrations/*.py
 */migrations/__pycache__/
 
-# Archivos de configuración de Django que no quieres compartir
+# Django configuration files you don't want to share
 *.env
-.env.example
 
-# Archivos de tests temporales
+# Temporary test files
 coverage/
 htmlcov/
 *.cover
@@ -40,7 +38,7 @@ htmlcov/
 nosetests.xml
 test-results.xml
 
-# Archivos de compilación (si usas webpack o algo similar)
+# Build files
 node_modules/
 dist/
 build/

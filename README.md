@@ -60,15 +60,21 @@ You must create a `.env` file based on the `.env.example` provided. Below are th
 - **AWS_STORAGE_BUCKET_NAME**:`my_bucket_name`
 - **AWS_REGION**: `AWS_REGION`
 
+#### JWT Configuration
+- **JWT_SECRET**: `jwt_secret_key`
+- **JWT_ALGORITHM**: `HS256`
+
 #### External Detection API
 - **API_URL**: `https://api_url.com/`
 
 ## Related Projects
 - You can find the source code for the detection API in the same organization [trackr-detection-api](https://github.com/PersonRecognition-TFG/trackr-ml-api)
 
+## JWT Security
+To secure API access, the backend implements JSON Web Token (JWT)-based authentication. This allows only authenticated users to interact with the endpoints that handle video uploads and communication with the discovery service.
+
 ## Running Locally
 To run the app locally with full functionality (including video detection):
-
 1. Clone and install dependencies.
 2. Start the external detection API locally.
 3. Set the environment variables using the `.env` file.

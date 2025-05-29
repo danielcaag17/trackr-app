@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from urllib.parse import quote
 import requests
-from ..utils import save_data
+from ..utils import save_data, generate_token
 from ..models import User
 import uuid
 from django.conf import settings
@@ -17,6 +17,9 @@ def predefined_videos(request):
             error_msg = quote("Video name not sent")
             return redirect(f"/detect/error/?error={error_msg}&code=500")
 
+        token = generate_token()
+        headers = {"Authorization": f"Bearer {token}"}
+
         params = {
             'file_name': video_name + "_detected"
         }
@@ -26,7 +29,7 @@ def predefined_videos(request):
         else:
             fastapi_url_get = 'http://127.0.0.1:5000'
         fastapi_url_get = fastapi_url_get + '/api/video/response'
-        response = requests.get(fastapi_url_get, params=params)
+        response = requests.get(fastapi_url_get, headers=headers, params=params)
 
         if response.status_code != 200:
             error_msg = f"Error: {response.status_code} - {response.text}"
