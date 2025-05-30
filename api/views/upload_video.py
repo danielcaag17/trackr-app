@@ -5,8 +5,11 @@ from urllib.parse import quote
 import uuid
 from ..utils import *
 from django.conf import settings
+import os
 
 RUNNING_LOCAL = settings.RUNNING_LOCAL
+ALLOWED_EXTENSIONS = ['.mp4', '.avi', '.mov']
+MAX_FILE_SIZE_MB = 500
 
 
 def post_method(video_file, video_id, user):
@@ -36,12 +39,24 @@ def post_method(video_file, video_id, user):
 
 def upload_video(request):
     if request.method == 'POST' and request.FILES['video']:
+        video_file = request.FILES.get('video')
+        extension = os.path.splitext(video_file.name)[1].lower()
+
+        if extension not in ALLOWED_EXTENSIONS:
+            error_msg = f"Error: Video format not allowed. Only MP4, AVI or MOV."
+            error_msg = quote(error_msg)
+            return redirect(f"/detect/error/?error={error_msg}&code=422")
+
+        if video_file.size > MAX_FILE_SIZE_MB * 1024 * 1024:
+            error_msg = f"Error: File is too large (< 500MB)."
+            error_msg = quote(error_msg)
+            return redirect(f"/detect/error/?error={error_msg}&code=413")
+
         try:
             user, created = User.objects.get_or_create(
                 username="default",
                 defaults={"email": "default@example.com"}
             )
-            video_file = request.FILES.get('video')
             video_id = str(uuid.uuid4()).replace('-', '')  # Assign an ID to the video
 
             try:
