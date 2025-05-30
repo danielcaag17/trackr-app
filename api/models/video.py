@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.utils import timezone
 from django.db import models
 from .user import User
 
@@ -8,6 +10,9 @@ class Video(models.Model):
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
     s3_url = models.URLField(max_length=500)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
 
     '''
     For now this (an autor can upload the same video several times)

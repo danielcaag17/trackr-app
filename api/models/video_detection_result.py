@@ -40,5 +40,8 @@ class VideoDetectionResult(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "title: " + self.title + ", autor: " + self.autor.username + ", ml_model: " + self.ml_model.model_name
+
     class Meta:
         unique_together = ('title', 'autor', 'ml_model')

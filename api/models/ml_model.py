@@ -23,3 +23,6 @@ class MLModel(models.Model):
     metrics = models.OneToOneField(
         ModelMetrics, on_delete=models.SET_NULL, null=True, blank=True, related_name='ml_model'
     )
+
+    def __str__(self):
+        return self.model_name
