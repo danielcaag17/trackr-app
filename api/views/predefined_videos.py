@@ -6,7 +6,7 @@ from ..models import User
 import uuid
 from django.conf import settings
 
-RUNNING_LOCAL = settings.RUNNING_LOCAL == "true"
+RUNNING_LOCAL = settings.RUNNING_LOCAL
 
 
 def predefined_videos(request):
