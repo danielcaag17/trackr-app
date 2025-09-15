@@ -68,7 +68,7 @@ You must create a `.env` file based on the `.env.example` provided. Below are th
 - **API_URL**: `https://api_url.com/`
 
 ## Related Projects
-- You can find the source code for the detection API in the same organization [trackr-detection-api](https://github.com/PersonRecognition-TFG/trackr-ml-api)
+- You can find the source code for the detection API in the same organization [trackr-detection-api](https://github.com/danielcaag17/trackr-api)
 
 ## JWT Security
 To secure API access, the backend implements JSON Web Token (JWT)-based authentication. This allows only authenticated users to interact with the endpoints that handle video uploads and communication with the discovery service.
